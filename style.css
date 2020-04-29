@@ -1,0 +1,116 @@
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-size: 14px;
+    color: #707070;
+    text-align: center;
+}
+
+a {
+    text-decoration: none;
+    outline: none;
+    color: #565656;
+    cursor: default;
+}
+
+ul {
+    list-style: none;
+}
+
+.container {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding-top: 30px;
+}
+
+.calculator {
+    width: 310px;
+    margin: 30px auto;
+    border: 1px solid rgba(0, 0, 0, 0.096);
+    border-radius: 5px 5px 0 0;
+    padding: 5px;
+    background: rgb(198,200,200);
+    background: linear-gradient(0deg, rgba(198,200,200,1) 0%, rgba(206,206,206,1) 0%, rgba(206,206,206,1) 71%, rgba(221,221,221,1) 83%, rgba(217,217,217,1) 100%, rgba(215,215,215,1) 100%);
+    -webkit-box-shadow: 0px 0px 5px 0px rgba(0,0,0,0.75);
+    -moz-box-shadow: 0px 0px 5px 0px rgba(0,0,0,0.75);
+    box-shadow: 0px 0px 5px 0px rgba(0,0,0,0.75);
+}
+
+.calculator .header-main {
+    padding: 0 5px;
+}
+.calculator .header-main .nav .nav-top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-weight: 700;
+    color: #7e7e7e;
+    text-shadow: 1px 1px 0px #EFEFEF;
+}
+
+.calculator .header-main .nav .nav-top i {
+    font-size: 12px;
+}
+
+.calculator .header-main .nav .nav-top li:last-child i:last-child {
+    margin-left: 10px;
+}
+
+
+.calculator .header-main .nav-main .nav-main-items {
+    display: flex;
+    align-items: center;
+    margin: 15px 0;
+}
+
+.calculator .header-main .nav-main .nav-main-items .nav-main-item {
+    margin-right: 15px;
+    text-shadow: 1px 1px 0px #EFEFEF;
+}
+
+.calculator #display-input {
+    font-size: 24px;
+    text-align: right;
+    width: 100%;
+    border: 1px solid black;
+    background: #ffffff;
+    padding: 10px 5px 20px;
+    color: #616161;
+}
+
+.calculator .keyboard .keyboard-buttons {
+    padding-top: 8px;
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    grid-template-rows: repeat(4, 1fr);
+}
+
+.calculator .keyboard .keyboard-button {
+    border: 1px solid rgba(0, 0, 0, 0.349);
+    text-align: center;
+    border-radius: 3px;
+    padding: 5px;
+    background: rgb(198,200,200);
+    background: linear-gradient(0deg, rgba(198,200,200,1) 0%, rgba(206,206,206,1) 0%, rgba(214,214,214,0.9136029411764706) 66%, rgba(217,217,217,1) 100%, rgba(215,215,215,1) 100%);
+    color: #565656;
+    text-shadow: 1px 1px 0px #EFEFEF;
+}
+
+.calculator .keyboard .keyboard-button:hover {
+    background-color: #ffffffa9;
+    cursor: default;
+}
+
+.calculator .keyboard .keyboard-button:active {
+    background-color: #a3a3a3d7;
+    cursor: default;
+}
+
+.calculator .keyboard .keyboard-button:last-child {
+    grid-column-start: 5;
+    grid-column-end: 7;
+}
