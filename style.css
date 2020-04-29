@@ -101,12 +101,12 @@ ul {
 }
 
 .calculator .keyboard .keyboard-button:hover {
-    background-color: #ffffffa9;
+    background: rgb(226, 226, 226);
     cursor: default;
 }
 
 .calculator .keyboard .keyboard-button:active {
-    background-color: #a3a3a3d7;
+    background:rgba(122, 122, 122, 0.624);
     cursor: default;
 }
 
