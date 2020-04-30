@@ -18,51 +18,68 @@ buttonsValue.forEach((buttonValue) => {
     keyboard.appendChild(button);
 });
 
+const keyDown = document.addEventListener('keypress', operate);
+function test (event) {
+    console.log(event.key);
+}
+
 // Setting the initial state
 let state = {
     display: undefined,
     operand: undefined,
-    curentResult: 0,
+    curentResult: '0',
     ecuation: [],
 };
 const buttons = document.querySelectorAll('.keyboard-button');
 [...buttons].forEach((button) => button.addEventListener('mousedown', operate));
 
-function operate({target}) {
+function operate(event) {
     event.stopPropagation();
     const display = document.querySelector('.calculator .display input');
-    const pressedButton = String(target.dataValue);
+    let pressedButton = (event.key) ? event.key : String(event.target.dataValue);
+    if (pressedButton === 'Enter') pressedButton = '=';
     if (pressedButton === 'Clear') {
         clear();
     } else if (pressedButton === 'Undo') {
         undo();
-    } else if (isOperand(pressedButton)) {
+    } else if (pressedButton === ',') {
+        pressedButton = '.';
+        if (state.display === undefined || +state.display === 0) {
+            state.ecuation = [0, '.'];
+            state.display = '0.';
+            display.value = state.display;
+        }else if (state.ecuation.length  > 0 && state.ecuation.indexOf('.') === -1) {
+            if (state.ecuation.length > 0) {
+                state.ecuation.push(pressedButton);
+                state.display = state.ecuation.join('');
+                display.value = state.display;
+
+            } else if (state.curentResult.length > 0 && state.curentResult.indexOf('.') === -1) {
+                state.ecuation = [...state.curentResult.split(''), '.'];
+                state.display = state.ecuation.join('');
+                state.curentResult = '0';
+            }
+            console.log(state.ecuation);
+        }
+    } else if (isNaN(pressedButton)) {
         if (state.ecuation.length > 0) {
             if (isSingleOperand(pressedButton)) {
-                let negative = 1;
-                if (+state.ecuation < 0) {
-                    state.ecuation = [Math.abs(+state.ecuation.join(''))];
-                    negative = -1;
-                }
-                state.display = (pressedButton === 'x<sup>2</sup>') 
-                    ? operations.square(+state.ecuation.join(''))
-                    : operations.squareroot(+state.ecuation.join(''));
+                console.log(state.ecuation);
+                state.display = (pressedButton === '&radic;') 
+                    ? operations.squareroot(+state.ecuation.join(''))
+                    : operations.square(+state.ecuation.join(''));
                 state.display = String(state.display).substring(0, 6);
-                if (negative < 0) state.display = state.display * negative;
                 state.ecuation = [state.display];
-                state.operand = undefined;
                 display.value = state.display;
             } else if (state.curentResult > 0) {
-                //operate between result and equation with pressedButton
-                console.log(operations.operate(7, 8, 'x'));
                 state.display = String(operations.operate(+state.curentResult, +state.ecuation.join(''), state.operand));
                 state.curentResult = state.display;
-                state.operand - pressedButton;
+                state.operand = (pressedButton === '=') ? undefined : pressedButton;
                 state.ecuation = [];
                 display.value = state.display;
-                if (pressedButton === '=') state.operand = undefined;
             } else {
                 state.operand = pressedButton;
+                if (pressedButton === '=') state.operand = undefined;
                 state.curentResult = state.ecuation.join('');
                 state.ecuation = [];
             }
@@ -74,24 +91,27 @@ function operate({target}) {
                 state.display = String(state.display).substring(0, 6);
                 state.ecuation = [state.display];
                 state.operand = undefined;
+                state.curentResult = '0';
                 display.value = state.display;
             } else {
-                state.operand = pressedButton;
+                state.operand = (pressedButton === '=') ? undefined : pressedButton;
             }
         }   
-    } else if (!isOperand(pressedButton)){
-            state.display = (state.display) 
+    } else if (!isNaN(pressedButton)){
+            if (state.operand === undefined && state.ecuation.length === 0 && state.curentResult > 0) {
+                state.ecuation = state.curentResult.split('');
+                //state.ecuation.push(pressedButton);
+                state.curentResult = '0';
+                state.display = state.ecuation.join('');
+                display.value = state.display;
+            }
+            state.display = (state.ecuation.length > 0) 
             ? state.ecuation.join('') + String(pressedButton)
             : String(pressedButton);
             state.ecuation.push(pressedButton)
-            display.value = state.display;
+            display.value = state.ecuation.join('');
     }
     console.table(state);
-}
-
-
-function isOperand(char) {
-    return !/^\d+$/.test(char);
 }
 
 function isSingleOperand(operand) {
@@ -111,9 +131,19 @@ function clear() {
 
 function undo() {
     const display = document.querySelector('.calculator .display input');
-    state = {
-        display: state.display.substring(0, state.display.length - 1),
-        ecuation: state.ecuation.slice(0, state.ecuation.length - 1),
+    if (state.ecuation.length > 1) {
+        state.display = state.display.substring(0, state.display.length - 1);
+        state.ecuation = state.ecuation.slice(0, state.ecuation.length - 1);
+    } else if (state.curentResult > 0) {
+        state.display = state.display.substring(0, state.display.length - 1);
+        state.ecuation = state.curentResult.split('').slice(0, state.curentResult.length - 1);
+        state.curentResult = '0';
+    } else {
+        state.display = '0';
+        state.ecuation = [];
+        state.curentResult = '0';
+        display.value = '0';
+        console.log('zero')
     }
     console.log(state.ecuation);
     display.value = state.display;

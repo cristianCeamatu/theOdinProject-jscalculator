@@ -3,20 +3,28 @@ const operations = {
         switch(operand) {
             case '+':
                 return a + b;
+                break;
             case '-':
                 return a - b;
+                break;
             case '÷':
                 return a / b;
+                break;
             case 'x':
                 return a * b;
+                break;
+            case '%':
+                return a % b;
+                break;
             default:
                 return 'Invalid operand';
         }
     },
     square(a) {
-        return a ** 2;
+        return Math.pow(a, 2);
     },
     squareroot(a) {
+        if (a <= 0) return 'Error';
         return Math.sqrt(a);
     },
 };
