@@ -20,12 +20,23 @@ const operations = {
                 return 'Invalid operand';
         }
     },
-    square(a) {
-        return Math.pow(a, 2);
-    },
-    squareroot(a) {
-        if (a <= 0) return 'Error';
-        return Math.sqrt(a);
+    operateSingleOperand(number, operand) {
+        switch(operand) {
+            case 'x*x':
+                return number ** 2;
+                break;
+            case '&radic;':
+                return Math.sqrt(number);
+                break;
+            case 'x/100':
+                return number / 100;
+                break;
+            case 'x*100':
+                return number * 100;
+                break;
+            default:
+                return 'Invalid operation'
+        }
     },
 };
 
