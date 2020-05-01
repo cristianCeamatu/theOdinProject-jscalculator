@@ -91,6 +91,11 @@ ul {
     color: #616161;
 }
 
+.calculator input#display-input:focus, .calculator input#display-input:active {
+    outline: none;
+    border: none;
+}
+
 .calculator #ecuation {
     font-size: 12px;
     margin-top: 0;
