@@ -137,7 +137,7 @@ function operate(event) {
     console.table(state);
 }
 
-// Single operands have a bigger length then 1 in our cases
+// Single operands have a length bigger then 1 in our cases
 function isSingleOperand(operand) {
     return (operand && operand.length > 1) || operand === 'x*x';
 }
