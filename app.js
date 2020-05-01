@@ -11,7 +11,7 @@ let buttonsValue = [
 // Populating the calculator keyboard
 const keyboard = document.querySelector('.keyboard .keyboard-buttons');
 buttonsValue.forEach((buttonValue) => {
-    const button = document.createElement('li');
+    const button = document.createElement('button');
     button.innerHTML = (buttonValue === 'x*x') ? 'x<sup>2</sup>' : buttonValue;
     button.dataValue = buttonValue;
     button.style.float = 'left';
@@ -34,7 +34,7 @@ const buttons = document.querySelectorAll('.keyboard-button');
 
 // Adding event listeneres for buttons, both keyboard and mouse use
 const keyDownListener = document.addEventListener('keydown', operate);
-const buttonClickedListener = [...buttons].forEach((button) => button.addEventListener('mousedown', operate));
+const buttonClickedListener = [...buttons].forEach((button) => button.addEventListener('click', operate));
 
 
 function operate(event) {
@@ -139,7 +139,7 @@ function operate(event) {
 
 // Single operands have a length bigger then 1 in our cases
 function isSingleOperand(operand) {
-    return (operand && operand.length > 1) || operand === 'x*x';
+    return (operand && operand.length > 1);
 }
 
 function clear(state, display) {
