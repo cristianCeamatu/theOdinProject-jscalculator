@@ -43,6 +43,9 @@ function operate(event) {
     event.preventDefault();
 
     const display = document.querySelector('.calculator .display input');
+    const currentResultEl = document.querySelector('#current-result');
+    const currentNumberEl = document.querySelector('#current-number');
+    const currentOperandEl = document.querySelector('#current-operand');
     let pressedButton;
     
     // Is the event is a keyboard button
@@ -65,15 +68,14 @@ function operate(event) {
         undo(state, display);
     } else if (pressedButton === ',') {
         pressedDot(state, display);
-    } else if (isNaN(pressedButton)) {
+    } else if (isNaN(pressedButton) && (+state.currentNumber.join('') !== 0 || +state.currentResult !== 0)) {
         // If we have a current number
         if (state.currentNumber.length > 0) {
-            if (isSingleOperand(pressedButton)) {
+            if (isSingleOperand(pressedButton) && +state.currentNumber.join('') > 0) {
                 console.log(pressedButton);
                 state.display = operations.operateSingleOperand(+state.currentNumber.join(''), pressedButton);
                 state.display = String(state.display).substring(0, 15);
                 state.currentNumber = [state.display];
-                state.operand = undefined;
                 display.value = state.display;
             // If we have both a currentResult and a currentNumber
             } else if (state.currentResult !== '0') {
@@ -97,13 +99,14 @@ function operate(event) {
         // If we don`t have a current number but we have a current result
         } else {
             if (isSingleOperand(pressedButton) && state.currentResult > 0) {
+                console.log(state.currentResult);
                 state.display = operations.operateSingleOperand(+state.currentResult, pressedButton);
                 state.display = String(state.display).substring(0, 15);
                 state.currentNumber = [state.display];
                 state.operand = undefined;
                 state.currentResult = '0';
                 display.value = state.display;
-            } else {
+            } else if (!isSingleOperand(pressedButton)){
                 // When pressedButton is '=' we don`t add an operand in the state
                 state.operand = (pressedButton === '=') ? undefined : pressedButton;
             }
@@ -119,19 +122,24 @@ function operate(event) {
             }
 
             // If the current number is 0 we replace it with the digit
-            state.display = (state.currentNumber.length > 0 && state.currentNumber.join('') > 0) 
+            state.display = ((state.currentNumber.length > 0 && state.currentNumber.join('') > 0) || state.currentNumber.indexOf('.') > 0) 
             ? state.currentNumber.join('') + String(pressedButton)
             : String(pressedButton);
             if (state.currentNumber) console.log(state.currentNumber.join('') > 0)
             state.currentNumber = [state.display];
             display.value = state.display;
     }
+
+    // Update equation where suitable
+    currentResultEl.textContent = (state.currentResult.length > 0 && Math.abs(+state.currentResult) > 0) ? state.currentResult : '';
+    currentNumberEl.textContent = (state.currentNumber.length > 0) ? state.currentNumber.join('') : '';
+    currentOperandEl.textContent = (state.operand) ? state.operand: '';
     console.table(state);
 }
 
 // Single operands have a bigger length then 1 in our cases
 function isSingleOperand(operand) {
-    return operand && operand.length > 1;
+    return (operand && operand.length > 1) || operand === 'x*x';
 }
 
 function clear(state, display) {
