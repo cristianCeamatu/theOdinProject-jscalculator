@@ -31,14 +31,18 @@ let state = {
 
 // Get all created buttons
 const buttons = document.querySelectorAll('.keyboard-button');
+// Because we have a sup element in the 'square' button so when we click this element we need the same dataValue
+const supEl = document.querySelector('.keyboard-button sup');
+supEl.dataValue = 'x*x';
 
 // Adding event listeneres for buttons, both keyboard and mouse use
 const keyDownListener = document.addEventListener('keydown', operate);
-const buttonClickedListener = [...buttons].forEach((button) => button.addEventListener('click', operate));
-
+const buttonClickedListener = [...buttons].forEach((button) => button.addEventListener('mousedown', operate));
+const supListener = supEl.addEventListener('mousedown', operate);
 
 function operate(event) {
     // To avoid unwanted behaviour
+
     event.stopPropagation();
     event.preventDefault();
 
