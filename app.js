@@ -1,27 +1,23 @@
+// Functions to do the maths
 import operations from './operations.js';
 
-// Populating the keyboard
+// Values used to populate the calculator keyboard
 let buttonsValue = [
-    7, 8 , 9, '÷', 'Undo', 'Clear', 
-    4, 5, 6, 'x', '(', ')', 
-    1, 2, 3, '-', 'x<sup>2</sup>', '&radic;',
-    0, ',', '%', '+', '=',
+    '7', '8' , '9', '÷', 'Undo', 'Clear', 
+    '4', '5', '6', 'x', 'x/100', '!x', 
+    '1', '2', '3', '-', 'x<sup>2</sup>', '&radic;',
+    '0', ',', '%', '+', '=',
 ]
+// Populating the calculator keyboard
 const keyboard = document.querySelector('.keyboard .keyboard-buttons');
 buttonsValue.forEach((buttonValue) => {
     const button = document.createElement('li');
     button.innerHTML = buttonValue;
-    button.dataKeyCode = String(buttonValue).charCodeAt(0);
     button.dataValue = buttonValue;
     button.style.float = 'left';
-    button.classList.add('keyboard-button');
+    button.className = 'keyboard-button';
     keyboard.appendChild(button);
 });
-
-const keyDown = document.addEventListener('keypress', operate);
-function test (event) {
-    console.log(event.key);
-}
 
 // Setting the initial state
 let state = {
@@ -30,34 +26,70 @@ let state = {
     curentResult: '0',
     ecuation: [],
 };
+
+
 const buttons = document.querySelectorAll('.keyboard-button');
-[...buttons].forEach((button) => button.addEventListener('mousedown', operate));
+
+// Adding event listeneres for button, both keyboard and mouse
+const keyDownListener = document.addEventListener('keydown', operate);
+const buttonClickedListener = [...buttons].forEach((button) => button.addEventListener('mousedown', operate));
+
 
 function operate(event) {
     event.stopPropagation();
+    event.preventDefault();
+    let pressedButton;
     const display = document.querySelector('.calculator .display input');
-    let pressedButton = (event.key) ? event.key : String(event.target.dataValue);
-    if (pressedButton === 'Enter') pressedButton = '=';
+    
+    // Is the event is a keyboard button
+    if (event.key) {
+        console.log(event.key);
+        // If 'Enter' was pressed we replace with '='
+        if (event.key === 'Enter') {
+            pressedButton = '=';
+        } else if (event.key === 'Backspace' || event.key === 'Delete') {
+            pressedButton = 'Undo';
+        } else if (event.key === '/') {
+            pressedButton = '÷';
+        } else if (event.key === '*') {
+            pressedButton = 'x';
+        } else if (event.key === '.') {
+            pressedButton = ',';
+        // If the key pressed is not from the calculator
+        } else if (buttonsValue.indexOf(event.key) === -1) {
+            return;
+        // Set the pressedbButton
+        } else {
+            pressedButton = event.key;
+        }
+    // If the event is a mouse click
+    } else {
+        pressedButton = String(event.target.dataValue);
+    }
+
+
     if (pressedButton === 'Clear') {
         clear();
     } else if (pressedButton === 'Undo') {
         undo();
     } else if (pressedButton === ',') {
+        // Switch to '.' to make javascript calculations
         pressedButton = '.';
+        // If the value is 0 or there is no value set we add '0.'
         if (state.display === undefined || +state.display === 0) {
             state.ecuation = [0, '.'];
             state.display = '0.';
             display.value = state.display;
-        }else if (state.ecuation.length  > 0 && state.ecuation.indexOf('.') === -1) {
+        } else if (state.ecuation.indexOf('.') === -1) {
             if (state.ecuation.length > 0) {
                 state.ecuation.push(pressedButton);
                 state.display = state.ecuation.join('');
                 display.value = state.display;
-
             } else if (state.curentResult.length > 0 && state.curentResult.indexOf('.') === -1) {
                 state.ecuation = [...state.curentResult.split(''), '.'];
                 state.display = state.ecuation.join('');
                 state.curentResult = '0';
+                display.value = state.display;
             }
             console.log(state.ecuation);
         }
@@ -71,7 +103,7 @@ function operate(event) {
                 state.display = String(state.display).substring(0, 6);
                 state.ecuation = [state.display];
                 display.value = state.display;
-            } else if (state.curentResult > 0) {
+            } else if (state.curentResult != '0') {
                 state.display = String(operations.operate(+state.curentResult, +state.ecuation.join(''), state.operand));
                 state.curentResult = state.display;
                 state.operand = (pressedButton === '=') ? undefined : pressedButton;
