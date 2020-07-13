@@ -1,6 +1,6 @@
 # This is a Linux - Ubuntu calculator clone build with Javascript
 
-> The project is Javascript Calculator build for [TheOdinProject](https://www.theodinproject.com/). Enjoy your calculations!
+> The project is a Javascript Calculator build for [TheOdinProject](https://www.theodinproject.com/). Enjoy your calculations!
 
 ![screenshot](./app-screenshot-full.png)
 
